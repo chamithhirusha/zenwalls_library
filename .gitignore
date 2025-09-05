@@ -1,0 +1,15 @@
+# Ignore everything
+*
+
+# But not these image extensions (case-insensitive)
+!*.jpg
+!*.jpeg
+!*.png
+!*.webp
+!*.JPG
+!*.JPEG
+!*.PNG
+!*.WEBP
+
+# Optional: unignore directories so images inside are tracked
+!*/
