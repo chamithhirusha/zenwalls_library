@@ -1,0 +1,32 @@
+name: Rename new files to timestamp
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Rename new files
+        run: |
+          for file in $(git diff-tree --no-commit-id --name-only -r ${{ github.sha }}); do
+            if [ -f "$file" ]; then
+              ext="${file##*.}"
+              timestamp=$(date +%s)
+              newfile="${timestamp}.${ext}"
+              if [ "$file" != "$newfile" ]; then
+                git mv "$file" "$newfile"
+              fi
+            fi
+          done
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git commit -am "Auto-rename files to timestamp"
+          git push
